@@ -1,5 +1,10 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.Customer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -11,7 +16,7 @@ public class CustomerController {
     private com.example.backend.service.CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<com.example.backend.model.Customer> addCustomer(@RequestBody com.example.backend.model.Customer customer) {
+    public ResponseEntity<Customer> addCustomer(@RequestBody com.example.backend.model.Customer customer) {
         com.example.backend.model.Customer createdCustomer = customerService.addCustomer(customer);
         return ResponseEntity.ok(createdCustomer);
     }
@@ -24,7 +29,7 @@ public class CustomerController {
 
     @GetMapping("/{name}")
     public ResponseEntity<List<com.example.backend.model.Customer>> searchCustomerByName(@PathVariable String name) {
-        List<com.example.backend.model.Customer> customers = customerService.searchCustomerByName(name);
+        List<com.example.backend.model.Customer> customers = customerService.searchCustomersByName(name);
         return ResponseEntity.ok(customers);
     }
 

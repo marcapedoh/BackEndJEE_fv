@@ -1,4 +1,4 @@
-package com.example.backend.service.impl;
+package com.example.backend.service;
 
 import com.example.backend.interfaces.AuthInterface;
 import com.example.backend.model.User;
@@ -14,27 +14,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthService implements AuthInterface {
 
-    @Autowired
+    /*@Autowired
     private AuthenticationManager authenticationManager;
-
+*/
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
+    /*@Autowired
     private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
+*/
+   /* @Autowired
     private UserDetailsService userDetailsService;
-
+*/
     @Override
     public String login(String username, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+       /* authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return jwtTokenProvider.generateToken(userDetails);
+        return jwtTokenProvider.generateToken(userDetails);*/
+        return null;
     }
 
     @Override

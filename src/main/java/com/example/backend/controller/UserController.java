@@ -1,5 +1,10 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -10,7 +15,7 @@ public class UserController {
     private com.example.backend.service.UserService userService;
 
     @PostMapping
-    public ResponseEntity<com.example.backend.model.User> createUser(@RequestBody com.example.backend.model.User user) {
+    public ResponseEntity<User> createUser(@RequestBody com.example.backend.model.User user) {
         com.example.backend.model.User createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser);
     }
@@ -23,8 +28,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<com.example.backend.model.User> getUserById(@PathVariable Long id) {
-        com.example.backend.model.User user = userService.getUserById(id);
-        return ResponseEntity.ok(user);
+        //com.example.backend.model.User user = userService.getUserById(id);
+        return ResponseEntity.ok(null/*user*/);
     }
 
     @PutMapping("/{id}")
