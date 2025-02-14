@@ -3,14 +3,15 @@ package com.example.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -42,6 +43,9 @@ public class User implements UserDetails {
     private Role role;
 
 
+    @Transient
+    private Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
@@ -69,7 +73,11 @@ public class User implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getRoleType().name()));
+        return authorities;
+    }
+
+    public void setAuthorities() {
+       authorities.add(new SimpleGrantedAuthority(role.getRoleType().name()));
     }
 
 }

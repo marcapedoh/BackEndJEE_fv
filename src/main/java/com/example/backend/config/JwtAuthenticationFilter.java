@@ -1,6 +1,7 @@
 package com.example.backend.config;
 
 
+import com.example.backend.model.User;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -32,8 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String token = getTokenFromRequest(request);
         if (StringUtils.hasText(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
             String userEmail = jwtService.extractUserEmail(token);
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            User userDetails = (User) this.userDetailsService.loadUserByUsername(userEmail);
+            userDetails.setAuthorities();
             if (jwtService.isTokenValid(token, userDetails)) {
+                System.out.println(userDetails.getAuthorities());
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);

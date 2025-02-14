@@ -32,9 +32,11 @@ public class AuthenticationService {
     private final CustomUserService customUserService;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new EntityNotFoundException("aucun utilisateur n'est trouvé!"));
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new EntityNotFoundException("aucun utilisateur n'est trouvé!"));
         String jwtToken = "";
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            user.setAuthorities();
+            System.out.println(user.getAuthorities());
             jwtToken = jwtService.generateToken(user);
         } else {
             throw new RuntimeException("Bad credentials.");

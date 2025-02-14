@@ -44,8 +44,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(APP_ROOT + "users/**").hasAuthority(UserType.USER.name())
                                 .anyRequest().authenticated()
                 )
-                .csrf(AbstractHttpConfigurer::disable
-                )
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
