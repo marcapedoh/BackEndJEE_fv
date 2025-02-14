@@ -48,9 +48,11 @@ public class AdminAutoLoader {
 
         String username = environment.getProperty("admin.username");
         String password = environment.getProperty("admin.password");
+        String name = environment.getProperty("admin.name");
 
         User user = new User();
         user.setRole(role);
+        user.setName(name);
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);

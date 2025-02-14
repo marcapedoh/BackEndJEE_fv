@@ -30,7 +30,8 @@ public class CustomerService {
     }
 
     public List<Customer> searchCustomersByName(String name) {
-        return customerRepository.findByLastNameLike("%" +name +"%");
+        String search = "%" +name +"%";
+        return customerRepository.findByLastNameLikeOrFirstNameLike(search, search);
     }
 
     public Customer updateCustomer(Long id, Customer customerDetails) {

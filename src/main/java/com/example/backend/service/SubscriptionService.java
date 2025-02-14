@@ -38,6 +38,13 @@ public class SubscriptionService {
                 );
     }
 
+    public Subscription enableSubscription(Long id) {
+        Subscription subscription = subscriptionRepository.getReferenceById(id);
+        subscription.setEnabled(true);
+        subscription = subscriptionRepository.save(subscription);
+        return subscription;
+    }
+
     public Subscription disableSubscription(Long id) {
         Subscription subscription = subscriptionRepository.getReferenceById(id);
         subscription.setEnabled(false);

@@ -1,11 +1,9 @@
 package com.example.backend.auth;
 
 
+import com.example.backend.config.CustomUserService;
 import com.example.backend.config.JwtService;
-import com.example.backend.dto.AuthenticationRequest;
-import com.example.backend.dto.AuthenticationResponse;
-import com.example.backend.dto.ChangePasswordRequest;
-import com.example.backend.dto.RegisterRequest;
+import com.example.backend.dto.*;
 import com.example.backend.exception.EntityNotFoundException;
 import com.example.backend.model.Role;
 import com.example.backend.model.User;
@@ -15,6 +13,9 @@ import com.example.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomUserService customUserService;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new EntityNotFoundException("aucun utilisateur n'est trouvé!"));
@@ -64,6 +66,7 @@ public class AuthenticationService {
 
         User user = User.builder()
                 .role(role)
+                .name(request.getName())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .username(request.getUsername())
                 .build();
@@ -76,9 +79,23 @@ public class AuthenticationService {
                 .build();
     }
 
+    public User updateUser(UpdateUserRequest updateUserRequest) {
+        User user = getAuthenticatedUser();
+
+        if (!user.getUsername().equals(updateUserRequest.getUsername()) && userRepository.existsByUsername(updateUserRequest.getUsername())) {
+            throw new RuntimeException("Any user already exists with username : " + updateUserRequest.getUsername());
+        }
+
+        user.setUsername(updateUserRequest.getUsername());
+        user.setName(updateUserRequest.getName());
+        user = userRepository.save(user);
+
+        return user;
+    }
+
     @Transactional
     public AuthenticationResponse changedPassword(ChangePasswordRequest changedPasswordTemplate) {
-        User user = userRepository.findByUsername(changedPasswordTemplate.getUsername()).orElseThrow(() -> new EntityNotFoundException("aucun utilisateur n'est trouvé!"));
+        User user = customUserService.getCurrentUser();
 
         if (!passwordEncoder.matches(changedPasswordTemplate.getCurrentPassword(), user.getPassword())) {
             throw new RuntimeException("Bad credentials. Current password not authorized");
@@ -93,5 +110,10 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
+    public User getAuthenticatedUser() {
+        return customUserService.getCurrentUser();
+    }
+
 
 }

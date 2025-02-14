@@ -4,12 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class ChangePasswordRequest {
+public class UpdateUserRequest {
 
     @NotBlank
-    private String currentPassword;
+    private String username;
 
     @NotBlank
-    private String newPassword;
+    private String name;
 
 }

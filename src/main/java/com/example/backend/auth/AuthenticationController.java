@@ -4,10 +4,8 @@ package com.example.backend.auth;
 
 import com.example.backend.dto.AuthenticationRequest;
 import com.example.backend.dto.AuthenticationResponse;
-import com.example.backend.dto.ChangePasswordRequest;
 import com.example.backend.dto.RegisterRequest;
 import io.swagger.annotations.Api;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
