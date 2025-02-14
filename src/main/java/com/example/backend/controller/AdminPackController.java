@@ -11,7 +11,7 @@ import java.util.List;
 import static com.example.backend.constant.Utils.APP_ROOT;
 
 @RestController
-@RequestMapping(APP_ROOT + "admin/packs")
+@RequestMapping(APP_ROOT + "admins/packs")
 public class AdminPackController {
 
     private final PackService packService;
