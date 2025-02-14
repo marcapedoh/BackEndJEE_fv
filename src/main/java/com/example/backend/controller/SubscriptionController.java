@@ -1,40 +1,31 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Subscription;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.backend.service.SubscriptionService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static com.example.backend.constant.Utils.APP_ROOT;
 
 @RestController
-@RequestMapping("/api/subscriptions")
+@RequestMapping(APP_ROOT + "users/subscriptions")
 public class SubscriptionController {
 
-    @Autowired
-    private com.example.backend.service.SubscriptionService subscriptionService;
+    private final SubscriptionService subscriptionService;
+
+    public SubscriptionController(SubscriptionService subscriptionService) {
+        this.subscriptionService = subscriptionService;
+    }
 
     @PostMapping
-    public ResponseEntity<Subscription> subscribeCustomer(@RequestBody com.example.backend.model.Subscription subscription) {
-        //com.example.backend.model.Subscription createdSubscription = subscriptionService.subscribeCustomer(subscription);
-        return ResponseEntity.ok(null/*createdSubscription*/);
+    public ResponseEntity<Subscription> subscribeCustomer(@Valid @RequestBody Subscription subscription) {
+        return ResponseEntity.ok(subscriptionService.createSubscription(subscription));
     }
 
-    @GetMapping("/{customerId}")
-    public ResponseEntity<com.example.backend.model.Subscription> getCustomerSubscription(@PathVariable Long customerId) {
-       // com.example.backend.model.Subscription subscription = subscriptionService.getCustomerSubscription(customerId);
-        return ResponseEntity.ok(null/*subscription*/);
+    @GetMapping("/{subscriptionId}")
+    public ResponseEntity<Subscription> getSubscriptionById(@PathVariable Long subscriptionId) {
+        return ResponseEntity.ok(subscriptionService.getSubscriptionById(subscriptionId));
     }
 
-    @DeleteMapping("/{subscriptionId}")
-    public ResponseEntity<Void> cancelSubscription(@PathVariable Long subscriptionId) {
-       // subscriptionService.cancelSubscription(subscriptionId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<List<com.example.backend.model.Subscription>> getAllSubscriptions() {
-        List<com.example.backend.model.Subscription> subscriptions = subscriptionService.getAllSubscriptions();
-        return ResponseEntity.ok(subscriptions);
-    }
 }

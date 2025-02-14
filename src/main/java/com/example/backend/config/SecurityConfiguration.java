@@ -23,12 +23,14 @@ import static com.example.backend.constant.Utils.APP_ROOT;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private  JwtAuthenticationFilter jwtAuthFilter;
+    private JwtAuthenticationFilter jwtAuthFilter;
     private AuthenticationProvider authenticationProvider;
+    private JwtAuthEntryPoint jwtAuthEntryPoint;
+
     @Autowired
-    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthFilter,AuthenticationProvider authenticationProvider){
-        this.jwtAuthFilter=jwtAuthFilter;
-        this.authenticationProvider=authenticationProvider;
+    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.authenticationProvider = authenticationProvider;
     }
 
     @Bean
@@ -36,18 +38,20 @@ public class SecurityConfiguration {
         return http
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers(APP_ROOT+"auth/**","/swagger-ui/**","/v3/api-docs","/**").permitAll()
+                                .requestMatchers(APP_ROOT + "auth/**", "/swagger-ui/**", "/v3/api-docs", "/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable
                 )
                 .cors(AbstractHttpConfigurer::disable)
-                .sessionManagement(session->
+                .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthEntryPoint))
                 .build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
