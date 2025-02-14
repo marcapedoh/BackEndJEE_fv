@@ -1,6 +1,7 @@
 package com.example.backend.config;
 
 
+import com.example.backend.model.enums.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers(APP_ROOT + "auth/**", "/swagger-ui/**", "/v3/api-docs", "/**").permitAll()
+                                .requestMatchers(APP_ROOT + "admins/**").hasAuthority(UserType.ADMIN.name())
+                                .requestMatchers(APP_ROOT + "users/**").hasAuthority(UserType.USER.name())
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable
