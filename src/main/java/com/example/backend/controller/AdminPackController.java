@@ -11,13 +11,18 @@ import java.util.List;
 import static com.example.backend.constant.Utils.APP_ROOT;
 
 @RestController
-@RequestMapping(APP_ROOT + "users/packs")
-public class PackController {
+@RequestMapping(APP_ROOT + "admin/packs")
+public class AdminPackController {
 
     private final PackService packService;
 
-    public PackController(PackService packService) {
+    public AdminPackController(PackService packService) {
         this.packService = packService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Pack> addPack(@Valid @RequestBody Pack pack) {
+        return ResponseEntity.ok(packService.addPack(pack));
     }
 
     @GetMapping
@@ -28,6 +33,17 @@ public class PackController {
     @GetMapping("/{id}")
     public ResponseEntity<Pack> getPackById(@PathVariable Long id) {
         return ResponseEntity.ok(packService.getPackById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pack> updatePack(@PathVariable Long id, @Valid @RequestBody Pack pack) {
+        return ResponseEntity.ok(packService.updatePack(id, pack));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePack(@PathVariable Long id) {
+        packService.deletePack(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import static com.example.backend.constant.Utils.APP_ROOT;
 
 @RestController
-@RequestMapping(APP_ROOT + "admin/subscriptions")
+@RequestMapping(APP_ROOT + "admins/subscriptions")
 public class AdminSubscriptionController {
 
     private final SubscriptionService subscriptionService;

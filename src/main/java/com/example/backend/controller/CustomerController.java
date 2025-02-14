@@ -11,7 +11,7 @@ import java.util.List;
 import static com.example.backend.constant.Utils.APP_ROOT;
 
 @RestController
-@RequestMapping(APP_ROOT + "customers")
+@RequestMapping(APP_ROOT + "users/customers")
 
 public class CustomerController {
 
@@ -19,16 +19,6 @@ public class CustomerController {
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-    }
-
-    @PostMapping
-    public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.addCustomer(customer));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
-        return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
     @GetMapping("{id}")
@@ -39,17 +29,6 @@ public class CustomerController {
     @GetMapping("/search")
     public ResponseEntity<List<Customer>> searchCustomerByName(@RequestParam(required = false, defaultValue = "") String name) {
         return ResponseEntity.ok(customerService.searchCustomersByName(name));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.updateCustomer(id, customer));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
-        return ResponseEntity.noContent().build();
     }
 
 }
