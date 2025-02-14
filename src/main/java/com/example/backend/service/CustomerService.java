@@ -4,6 +4,7 @@ import com.example.backend.model.Customer;
 import com.example.backend.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -39,7 +40,6 @@ public class CustomerService {
         customer.setFirstName(customerDetails.getFirstName());
         customer.setLastName(customerDetails.getLastName());
         customer.setPhoneNumber(customerDetails.getPhoneNumber());
-        customer.setActiveSubscription(customerDetails.isActiveSubscription());
         return customerRepository.save(customer);
     }
 

@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.model.Subscription;
 import com.example.backend.service.SubscriptionService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class SubscriptionController {
     }
 
     @PostMapping
-    public ResponseEntity<Subscription> subscribeCustomer(@RequestBody Subscription subscription) {
+    public ResponseEntity<Subscription> subscribeCustomer(@Valid @RequestBody Subscription subscription) {
         return ResponseEntity.ok(subscriptionService.createSubscription(subscription));
     }
 

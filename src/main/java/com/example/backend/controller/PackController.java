@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.model.Pack;
 import com.example.backend.service.PackService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +21,8 @@ public class PackController {
     }
 
     @PostMapping
-    public ResponseEntity<Pack> addPack(@RequestBody Pack pack) {
-        Pack createdPack = packService.addPack(pack);
-        return ResponseEntity.ok(createdPack);
+    public ResponseEntity<Pack> addPack(@Valid @RequestBody Pack pack) {
+        return ResponseEntity.ok(packService.addPack(pack));
     }
 
     @GetMapping
@@ -36,7 +36,7 @@ public class PackController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pack> updatePack(@PathVariable Long id, @RequestBody Pack pack) {
+    public ResponseEntity<Pack> updatePack(@PathVariable Long id, @Valid @RequestBody Pack pack) {
         return ResponseEntity.ok(packService.updatePack(id, pack));
     }
 

@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.model.Customer;
 import com.example.backend.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
         return ResponseEntity.ok(customerService.addCustomer(customer));
     }
 
@@ -41,7 +42,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer customer) {
         return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
 
