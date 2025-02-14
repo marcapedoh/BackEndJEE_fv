@@ -36,7 +36,6 @@ public class AuthenticationService {
         String jwtToken = "";
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             user.setAuthorities();
-            System.out.println(user.getAuthorities());
             jwtToken = jwtService.generateToken(user);
         } else {
             throw new RuntimeException("Bad credentials.");
