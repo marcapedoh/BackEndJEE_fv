@@ -1,42 +1,48 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Customer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.backend.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.backend.constant.Utils.APP_ROOT;
+
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping(APP_ROOT + "customers")
 
 public class CustomerController {
 
-    @Autowired
-    private com.example.backend.service.CustomerService customerService;
+    private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @PostMapping
-    public ResponseEntity<Customer> addCustomer(@RequestBody com.example.backend.model.Customer customer) {
-        com.example.backend.model.Customer createdCustomer = customerService.addCustomer(customer);
-        return ResponseEntity.ok(createdCustomer);
+    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
+        return ResponseEntity.ok(customerService.addCustomer(customer));
     }
 
     @GetMapping
-    public ResponseEntity<List<com.example.backend.model.Customer>> getAllCustomers() {
-        List<com.example.backend.model.Customer> customers = customerService.getAllCustomers();
-        return ResponseEntity.ok(customers);
+    public ResponseEntity<List<Customer>> getAllCustomers() {
+        return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<List<com.example.backend.model.Customer>> searchCustomerByName(@PathVariable String name) {
-        List<com.example.backend.model.Customer> customers = customerService.searchCustomersByName(name);
-        return ResponseEntity.ok(customers);
+    @GetMapping("{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        return ResponseEntity.ok(customerService.getCustomerById(id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Customer>> searchCustomerByName(@RequestParam(required = false, defaultValue = "") String name) {
+        return ResponseEntity.ok(customerService.searchCustomersByName(name));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<com.example.backend.model.Customer> updateCustomer(@PathVariable Long id, @RequestBody com.example.backend.model.Customer customer) {
-        com.example.backend.model.Customer updatedCustomer = customerService.updateCustomer(id, customer);
-        return ResponseEntity.ok(updatedCustomer);
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
+        return ResponseEntity.ok(customerService.updateCustomer(id, customer));
     }
 
     @DeleteMapping("/{id}")
@@ -44,4 +50,5 @@ public class CustomerController {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }
+
 }

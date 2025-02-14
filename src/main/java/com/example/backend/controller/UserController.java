@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,31 +11,30 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private com.example.backend.service.UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody com.example.backend.model.User user) {
-        com.example.backend.model.User createdUser = userService.createUser(user);
-        return ResponseEntity.ok(createdUser);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
     @GetMapping
-    public ResponseEntity<List<com.example.backend.model.User>> getAllUsers() {
-        List<com.example.backend.model.User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<com.example.backend.model.User> getUserById(@PathVariable Long id) {
-        //com.example.backend.model.User user = userService.getUserById(id);
-        return ResponseEntity.ok(null/*user*/);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<com.example.backend.model.User> updateUser(@PathVariable Long id, @RequestBody com.example.backend.model.User user) {
-        com.example.backend.model.User updatedUser = userService.updateUser(id, user);
-        return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
     @DeleteMapping("/{id}")
@@ -43,4 +42,5 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
 }

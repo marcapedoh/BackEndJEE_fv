@@ -1,10 +1,17 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Setter
+@Getter
 @Entity
+@AllArgsConstructor
 @Table(name = "subscription")
 public class Subscription {
 
@@ -12,14 +19,27 @@ public class Subscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
+    @JsonIgnore
     @Column(name = "pack_id", nullable = false)
     private Long packId;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
+
+    @Column(name = "end_date", nullable = false)
+    private LocalDate endDate;
+
+    private boolean enabled;
+
+    @Transient
+    private Customer customer;
+
+    @Transient
+    private Pack pack;
 
     public Subscription() {
     }
@@ -30,35 +50,4 @@ public class Subscription {
         this.startDate = startDate;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
-
-    public Long getPackId() {
-        return packId;
-    }
-
-    public void setPackId(Long packId) {
-        this.packId = packId;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
 }

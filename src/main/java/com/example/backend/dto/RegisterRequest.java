@@ -1,8 +1,6 @@
-package com.example.backend.auth;
+package com.example.backend.dto;
 
-import com.example.backend.model.UserType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RegisterRequest {
+
+    @NotBlank
     private String username;
+
+    @NotBlank
     private String password;
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
+
 }

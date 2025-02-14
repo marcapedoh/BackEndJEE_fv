@@ -2,17 +2,18 @@ package com.example.backend.service;
 
 import com.example.backend.model.Pack;
 import com.example.backend.repository.PackRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PackService {
 
-    @Autowired
-    private PackRepository packRepository;
+    private final PackRepository packRepository;
+
+    public PackService(PackRepository packRepository) {
+        this.packRepository = packRepository;
+    }
 
     public Pack addPack(Pack pack) {
         return packRepository.save(pack);
@@ -22,8 +23,10 @@ public class PackService {
         return packRepository.findAll();
     }
 
-    public Optional<Pack> getPackById(Long id) {
-        return packRepository.findById(id);
+    public Pack getPackById(Long id) {
+        return packRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Pack not found")
+        );
     }
 
     public Pack updatePack(Long id, Pack packDetails) {
